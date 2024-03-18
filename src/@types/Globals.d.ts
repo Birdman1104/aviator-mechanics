@@ -13,13 +13,6 @@ type AssetNameAndPath = {
     path: string;
 };
 
-type SpineFiles = {
-    key: string;
-    jsonURL: string;
-    atlasURL: string;
-    preMultipliedAlpha?: boolean;
-};
-
 type BezierPoint = {
     x: number;
     y: number;

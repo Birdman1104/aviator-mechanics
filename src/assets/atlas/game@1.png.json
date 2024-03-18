@@ -1,0 +1,39 @@
+{
+  "frames": {
+    "green_button_up.png": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 100,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 100,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "game.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 106,
+      "h": 134
+    },
+    "scale": 1
+  }
+}

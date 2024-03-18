@@ -21,10 +21,6 @@ const paths = {
         path: join(assetsPath, 'fonts'),
         name: 'fonts',
     },
-    spines: {
-        path: join(assetsPath, 'spines'),
-        name: 'spines',
-    },
     uncompressed: {
         path: join(assetsPath, 'uncompressed'),
         name: 'uncompressed',
@@ -238,33 +234,6 @@ async function generateFonts() {
     }
 }
 
-async function generateSpines() {
-    const { path } = paths.spines;
-    try {
-        const spines = await fs.readdir(path, 'utf8');
-        let spineFiles = [];
-        if (spines.length !== 0) {
-            spineFiles = await Promise.all(
-                spines.map(async (s) => {
-                    const files = await getFolderContent(join(path, s));
-                    return {
-                        key: s,
-                        jsonURL: findFileWithExtension(files, 'json'),
-                        atlasURL: findFileWithExtension(files, 'atlas'),
-                        preMultipliedAlpha: true,
-                    };
-                }),
-            );
-        }
-        const file = join(assetsPath, 'assetsNames/spines.ts');
-        const data = `export const spines: SpineFiles[] = ${JSON.stringify(spineFiles)}`;
-        await fs.writeFile(file, data);
-        await runPrettierOn(file);
-    } catch (e) {
-        console.log(e.message);
-    }
-}
-
 async function start() {
     console.log('removing current sprite sheets');
     await emptyAtlasFolder();
@@ -276,8 +245,6 @@ async function start() {
     await generateAudioAssets();
     console.log('generating fonts');
     await generateFonts();
-    console.log('generating spines');
-    await generateSpines();
     console.log('asset generation complete');
     console.log('running the game');
 }

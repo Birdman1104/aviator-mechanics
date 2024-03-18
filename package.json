@@ -44,7 +44,6 @@
         "@pixi/core": "^7.2.4",
         "animejs": "^3.2.2",
         "howler": "^2.2.3",
-        "pixi-spine": "^4.0.4",
         "pixi.js": "^7.2.4"
     }
 }
