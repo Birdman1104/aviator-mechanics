@@ -1,4 +1,4 @@
-import { Container, Graphics, Rectangle } from 'pixi.js';
+import { Container, Graphics, LINE_CAP, Rectangle } from 'pixi.js';
 
 export class Graph extends Container {
     private startPoint: BezierPoint;
@@ -7,11 +7,13 @@ export class Graph extends Container {
     private displacementPoint: BezierPoint;
     private displacementPointTarget1: BezierPoint;
     private displacementPointTarget2: BezierPoint;
-    private bezier: Graphics;
+    private orangeBkg: Graphics;
+    private bezierLine: Graphics;
 
+    private progress = 0;
     // TODO remove points graphics
     private pointsGraphics: Graphics;
-    private progress = 0;
+
     constructor() {
         super();
 
@@ -38,8 +40,7 @@ export class Graph extends Container {
         }
 
         this.clearGraphs();
-        this.buildPoints();
-        this.buildBezier();
+        this.draw();
     }
 
     public rebuild(): void {
@@ -55,8 +56,13 @@ export class Graph extends Container {
         gr.endFill();
         this.addChild(gr);
 
+        this.draw();
+    }
+
+    private draw(): void {
         this.buildPoints();
-        this.buildBezier();
+        this.buildOrangeBkg();
+        this.buildWhiteLine();
     }
 
     private init(): void {
@@ -83,11 +89,11 @@ export class Graph extends Container {
         this.addChild(this.pointsGraphics);
     }
 
-    private buildBezier(): void {
-        this.bezier = new Graphics();
-        this.bezier.lineStyle(2, 0x000000, 1);
-        this.bezier.moveTo(this.startPoint.x, this.startPoint.y);
-        this.bezier.bezierCurveTo(
+    private buildOrangeBkg(): void {
+        this.orangeBkg = new Graphics();
+        this.orangeBkg.beginFill(0xff9e02, 1);
+        this.orangeBkg.moveTo(this.startPoint.x, this.startPoint.y);
+        this.orangeBkg.bezierCurveTo(
             this.displacementPoint.x,
             this.displacementPoint.y,
             this.displacementPoint.x,
@@ -95,13 +101,35 @@ export class Graph extends Container {
             this.endPoint.x,
             this.endPoint.y,
         );
+        this.orangeBkg.lineTo(this.endPoint.x, this.displacementPointTarget2.y);
+        this.orangeBkg.lineTo(this.startPoint.x, this.startPoint.y);
 
-        this.addChild(this.bezier);
+        this.addChild(this.orangeBkg);
+    }
+
+    private buildWhiteLine(): void {
+        this.bezierLine = new Graphics();
+        this.bezierLine.lineStyle({
+            width: 10,
+            color: 0xffffff,
+            cap: LINE_CAP.ROUND,
+        });
+        this.bezierLine.moveTo(this.startPoint.x, this.startPoint.y);
+        this.bezierLine.bezierCurveTo(
+            this.displacementPoint.x,
+            this.displacementPoint.y,
+            this.displacementPoint.x,
+            this.displacementPoint.y,
+            this.endPoint.x,
+            this.endPoint.y,
+        );
+        this.addChild(this.bezierLine);
     }
 
     private clearGraphs(): void {
-        this.bezier.clear();
+        this.orangeBkg.clear();
         this.pointsGraphics.clear();
+        this.bezierLine.clear();
     }
 
     private getPointsArray(): BezierPoint[] {
