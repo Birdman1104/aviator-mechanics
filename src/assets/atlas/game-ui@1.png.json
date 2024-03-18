@@ -1,0 +1,63 @@
+{
+  "frames": {
+    "counter-bkg.png": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 400,
+        "h": 117
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 400,
+        "h": 117
+      },
+      "sourceSize": {
+        "w": 400,
+        "h": 117
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bkg.png": {
+      "frame": {
+        "x": 3,
+        "y": 126,
+        "w": 330,
+        "h": 330
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 330,
+        "h": 330
+      },
+      "sourceSize": {
+        "w": 330,
+        "h": 330
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.4",
+    "image": "game-ui.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 406,
+      "h": 459
+    },
+    "scale": 1
+  }
+}
