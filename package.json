@@ -7,6 +7,7 @@
         "start": "npm run generateAssets && npm run generateEventNames && webpack serve --config webpack/webpack.dev.js",
         "generateEventNames": "node nodeScripts/GenerateEventNames.js",
         "generateAssets": "node nodeScripts/GenerateAssets.js",
+        "build": "webpack --config webpack/webpack.prod.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Birdman",
@@ -34,7 +35,8 @@
         "webpack": "^5.87.0",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^4.15.1",
-        "webpack-merge": "^5.9.0"
+        "webpack-merge": "^5.9.0",
+        "webpack-obfuscator": "^3.5.1"
     },
     "dependencies": {
         "@armathai/lego": "^5.0.9",
