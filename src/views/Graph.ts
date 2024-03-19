@@ -64,9 +64,9 @@ export class Graph extends Container {
     }
 
     private draw(): void {
-        this.buildPoints();
-        this.buildOrangeBkg();
-        this.buildWhiteLine();
+        this.drawOrangeBkg();
+        this.drawWhiteLine();
+        this.drawPoints();
     }
 
     private init(): void {
@@ -79,12 +79,11 @@ export class Graph extends Container {
         this.displacementPointTarget2 = { x: WIDTH * 0.8, y: HEIGHT * 0.8, r: 5 };
     }
 
-    private buildPoints(): void {
-        const arr = this.getPointsArray();
+    private drawPoints(): void {
         this.pointsGraphics = new Graphics();
 
         this.pointsGraphics.beginFill(0xff0000, 1);
-        arr.forEach((point) => {
+        this.getPointsArray().forEach((point) => {
             const { x, y, r } = point;
             this.pointsGraphics.drawCircle(x, y, r);
         });
@@ -93,7 +92,7 @@ export class Graph extends Container {
         this.addChild(this.pointsGraphics);
     }
 
-    private buildOrangeBkg(): void {
+    private drawOrangeBkg(): void {
         this.orangeBkg = new Graphics();
         this.orangeBkg.beginFill(0xff9e02, 1);
         this.orangeBkg.moveTo(this.startPoint.x, this.startPoint.y);
@@ -111,7 +110,7 @@ export class Graph extends Container {
         this.addChild(this.orangeBkg);
     }
 
-    private buildWhiteLine(): void {
+    private drawWhiteLine(): void {
         this.bezierLine = new Graphics();
         this.bezierLine.lineStyle({
             width: 10,
@@ -137,6 +136,6 @@ export class Graph extends Container {
     }
 
     private getPointsArray(): BezierPoint[] {
-        return [this.startPoint, this.displacementPoint, this.endPoint];
+        return [this.displacementPoint, this.endPoint];
     }
 }

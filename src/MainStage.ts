@@ -3,13 +3,11 @@ import { callIfExists } from './Utils';
 import { BackgroundView } from './views/BackgroundView';
 import { ForegroundView } from './views/ForegroundView';
 import { GameView } from './views/GameView';
-import { UIView } from './views/UIView';
 
 class PixiStage extends Container {
     private started = false;
     private bgView: BackgroundView;
     private gameView: GameView;
-    private uiView: UIView;
     private foregroundView: ForegroundView;
 
     constructor() {
@@ -24,7 +22,6 @@ class PixiStage extends Container {
     public resize(): void {
         this.bgView?.rebuild();
         this.gameView?.rebuild();
-        this.uiView?.rebuild();
         this.foregroundView?.rebuild();
     }
 
@@ -33,8 +30,6 @@ class PixiStage extends Container {
         this.addChild(this.bgView);
         this.gameView = new GameView();
         this.addChild(this.gameView);
-        this.uiView = new UIView();
-        this.addChild(this.uiView);
         this.foregroundView = new ForegroundView();
         this.addChild(this.foregroundView);
 

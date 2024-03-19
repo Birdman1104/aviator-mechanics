@@ -8,7 +8,7 @@ const getGameViewGridLandscapeConfig = () => {
     const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
     return {
         name: 'game',
-        debug: { color: 0xd9ff27 },
+        // debug: { color: 0xd9ff27 },
         bounds,
         cells: [
             {
@@ -23,7 +23,7 @@ const getGameViewGridPortraitConfig = () => {
     const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
     return {
         name: 'game',
-        debug: { color: 0xd9ff27 },
+        // debug: { color: 0xd9ff27 },
         bounds,
         cells: [
             {
