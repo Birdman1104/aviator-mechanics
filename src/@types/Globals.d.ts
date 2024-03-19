@@ -20,6 +20,13 @@ type BezierPoint = {
     r: number;
 };
 
+type IntervalsData = {
+    minM: number;
+    maxM: number;
+    minR: number;
+    maxR: number;
+};
+
 declare namespace GlobalMixins {
     interface DisplayObjectEvents {
         hideComplete: [string];

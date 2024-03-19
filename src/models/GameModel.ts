@@ -6,6 +6,7 @@ export enum GameState {
 
 export class GameModel extends ObservableModel {
     private _state: GameState;
+    private intervalsData: IntervalsData[] = [];
 
     constructor() {
         super('GameModel');
@@ -23,6 +24,41 @@ export class GameModel extends ObservableModel {
     }
 
     public init(): void {
+        this.initIntervalsData();
         this._state = GameState.Unknown;
+    }
+
+    private initIntervalsData(): void {
+        const MULTIPLIERS_CHECKPOINTS = [1, 5, 10, 20, 50, 100, 1000, 10000, 100000, 1000000];
+        const RND_CHECKPOINTS = [-0, 0.36, 0.55, 0.73, 0.81, 0.88, 0.93, 0.97, 0.99, 1];
+
+        MULTIPLIERS_CHECKPOINTS.forEach((m, i) => {
+            this.intervalsData.push({
+                minM: m,
+                maxM: MULTIPLIERS_CHECKPOINTS[i + 1],
+                minR: RND_CHECKPOINTS[i],
+                maxR: RND_CHECKPOINTS[i + 1],
+            });
+        });
+    }
+
+    private getMultiplier(): number {
+        /*
+         * probability of wining
+         * 36% to get multiplier between [1, 5]
+         * 19% to get multiplier between [5, 10]
+         * 18% to get multiplier between [10, 20]
+         * 8% to get multiplier between [20, 50]
+         * 7% to get multiplier between [50, 100]
+         * 5% to get multiplier between [100, 1000]
+         * 4% to get multiplier between [1000, 10000]
+         * 2% to get multiplier between [10000, 100000]
+         * 1% to get multiplier between [100000, 1000000]
+         */
+
+        const r = Math.random();
+        const data = this.intervalsData.find((data) => data.minR <= r && data.maxR >= r) as IntervalsData;
+
+        return Math.random() * (data.maxM - data.minM) + data.minM;
     }
 }
