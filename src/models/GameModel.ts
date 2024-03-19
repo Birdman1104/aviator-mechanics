@@ -1,3 +1,4 @@
+import { delayRunnable } from '../Utils';
 import { MULTIPLIERS_CHECKPOINTS, RND_CHECKPOINTS } from '../configs/Constants';
 import { ObservableModel } from './ObservableModel';
 
@@ -10,6 +11,7 @@ export enum GameState {
 
 export class GameModel extends ObservableModel {
     private _state: GameState;
+    private _multiplier: number = -1;
     private intervalsData: IntervalsData[] = [];
 
     constructor() {
@@ -27,9 +29,25 @@ export class GameModel extends ObservableModel {
         this._state = value;
     }
 
+    get multiplier(): number {
+        return this._multiplier;
+    }
+
+    set multiplier(value: number) {
+        this._multiplier = value;
+    }
+
     public init(): void {
         this.initIntervalsData();
-        this._state = GameState.Unknown;
+        this._state = GameState.Starting;
+    }
+
+    public setNewMultiplier(): void {
+        this._multiplier = this.getMultiplier();
+    }
+
+    public setTimerToStartActionState(): void {
+        delayRunnable(1.5, () => (this._state = GameState.Action), null);
     }
 
     private initIntervalsData(): void {
@@ -60,6 +78,6 @@ export class GameModel extends ObservableModel {
         const r = Math.random();
         const data = this.intervalsData.find((data) => data.minR <= r && data.maxR >= r) as IntervalsData;
 
-        return Math.random() * (data.maxM - data.minM) + data.minM;
+        return +(Math.random() * (data.maxM - data.minM) + data.minM).toFixed(2);
     }
 }

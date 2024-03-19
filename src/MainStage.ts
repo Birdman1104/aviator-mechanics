@@ -14,9 +14,9 @@ class PixiStage extends Container {
         super();
     }
 
-    public update(delta): void {
+    public update(): void {
         if (!this.started) return;
-        callIfExists(() => this.gameView?.update(delta));
+        callIfExists(() => this.gameView?.update());
     }
 
     public resize(): void {

@@ -39,7 +39,7 @@ class App extends Application {
         await this.loadAssets();
         this.onLoadComplete();
 
-        this.ticker.add((delta) => this.stage.update(delta));
+        this.ticker.add(() => this.stage.update());
     }
 
     public appResize(): void {

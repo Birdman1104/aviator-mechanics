@@ -29,7 +29,7 @@ export class Graph extends Container {
         return new Rectangle(0, 0, WIDTH, HEIGHT);
     }
 
-    public update(delta): void {
+    public update(): void {
         this.endPoint.x += (this.endPointTarget.x - this.endPoint.x) * SPEED;
         this.endPoint.y += (this.endPointTarget.y - this.endPoint.y) * SPEED;
 

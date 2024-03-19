@@ -1,3 +1,5 @@
+import { Rectangle } from 'pixi.js';
+
 export const lp = (l, p) => {
     const { clientWidth: w, clientHeight: h } = document.body;
     return w > h ? l : p;
@@ -45,4 +47,20 @@ export const callIfExists = (callback: any): void => {
     if (typeof callback === 'function') {
         callback();
     }
+};
+
+export const getGameBounds = () => {
+    const { clientWidth: width, clientHeight: height } = document.body;
+
+    return new Rectangle(0, 0, width, height);
+};
+
+export const isSquareLikeScreen = (): boolean => {
+    const { width, height } = getGameBounds();
+    return Math.min(width, height) / Math.max(width, height) > 0.7;
+};
+
+export const isNarrowScreen = (): boolean => {
+    const { width, height } = getGameBounds();
+    return Math.min(width, height) / Math.max(width, height) < 0.5;
 };
