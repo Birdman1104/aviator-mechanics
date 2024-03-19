@@ -1,6 +1,7 @@
 import { Container, Graphics, LINE_CAP, Rectangle } from 'pixi.js';
+import { GRAPH_SPEED } from '../configs/Constants';
+import { YAxis } from './YAxis';
 
-const SPEED = 0.001;
 const WIDTH = 800;
 const HEIGHT = 600;
 
@@ -13,6 +14,8 @@ export class Graph extends Container {
     private displacementPointTarget2: BezierPoint;
     private orangeBkg: Graphics | null;
     private bezierLine: Graphics | null;
+
+    private yAxis: YAxis;
 
     private progress = 0;
     // TODO remove points graphics
@@ -41,17 +44,19 @@ export class Graph extends Container {
     }
 
     public update(): void {
-        this.endPoint.x += (this.endPointTarget.x - this.endPoint.x) * SPEED;
-        this.endPoint.y += (this.endPointTarget.y - this.endPoint.y) * SPEED;
+        this.endPoint.x += (this.endPointTarget.x - this.endPoint.x) * GRAPH_SPEED;
+        this.endPoint.y += (this.endPointTarget.y - this.endPoint.y) * GRAPH_SPEED;
 
         this.progress = this.endPoint.x / this.endPointTarget.x;
 
         if (this.progress <= 0.6) {
-            this.displacementPoint.x += (this.displacementPointTarget1.x - this.displacementPoint.x) * SPEED;
-            this.displacementPoint.y += (this.displacementPointTarget1.y - this.displacementPoint.y) * SPEED;
+            this.displacementPoint.x += (this.displacementPointTarget1.x - this.displacementPoint.x) * GRAPH_SPEED;
+            this.displacementPoint.y += (this.displacementPointTarget1.y - this.displacementPoint.y) * GRAPH_SPEED;
         } else {
-            this.displacementPoint.x += (this.displacementPointTarget2.x - this.displacementPoint.x) * (SPEED / 4);
-            this.displacementPoint.y += (this.displacementPointTarget2.y - this.displacementPoint.y) * (SPEED / 4);
+            this.displacementPoint.x +=
+                (this.displacementPointTarget2.x - this.displacementPoint.x) * (GRAPH_SPEED / 4);
+            this.displacementPoint.y +=
+                (this.displacementPointTarget2.y - this.displacementPoint.y) * (GRAPH_SPEED / 4);
         }
 
         this.clearGraphs();
@@ -68,6 +73,13 @@ export class Graph extends Container {
         this.addChild(gr);
 
         this.draw();
+        this.buildYAxes();
+    }
+
+    private buildYAxes(): void {
+        this.yAxis = new YAxis();
+        this.yAxis.position.set(0, 0);
+        this.addChild(this.yAxis);
     }
 
     private draw(drawBW = false): void {

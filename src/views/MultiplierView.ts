@@ -1,21 +1,16 @@
 import { lego } from '@armathai/lego';
 import { Container, Text } from 'pixi.js';
+import { ACCELERATION, MULTIPLIER_SPEED } from '../configs/Constants';
 import { MultiplierEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 
-const ACCELERATION = 0.00005;
-const ANIMATION_SPEED = 0.001;
-
 export class MultiplierView extends Container {
+    private multiplierText: Text;
     private multiplierTarget: number;
     private multiplierValue = '1';
     private trueValue = 1;
-
-    private multiplierText: Text;
-
     private hasReachedTargetMultiplier = false;
-
-    private animationSpeed = ANIMATION_SPEED;
+    private animationSpeed = MULTIPLIER_SPEED;
 
     constructor() {
         super();
@@ -32,7 +27,7 @@ export class MultiplierView extends Container {
         this.multiplierValue = '1';
         this.trueValue = 1;
         this.hasReachedTargetMultiplier = false;
-        this.animationSpeed = ANIMATION_SPEED;
+        this.animationSpeed = MULTIPLIER_SPEED;
         this.multiplierText.text = `1.00x`;
         this.multiplierText.style.fill = 0xffffff;
     }
