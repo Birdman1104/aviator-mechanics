@@ -11,12 +11,12 @@ export class Graph extends Container {
     private displacementPoint: BezierPoint;
     private displacementPointTarget1: BezierPoint;
     private displacementPointTarget2: BezierPoint;
-    private orangeBkg: Graphics;
-    private bezierLine: Graphics;
+    private orangeBkg: Graphics | null;
+    private bezierLine: Graphics | null;
 
     private progress = 0;
     // TODO remove points graphics
-    private pointsGraphics: Graphics;
+    private pointsGraphics: Graphics | null;
 
     constructor() {
         super();
@@ -27,6 +27,17 @@ export class Graph extends Container {
 
     public getBounds(): Rectangle {
         return new Rectangle(0, 0, WIDTH, HEIGHT);
+    }
+
+    public reset() {
+        this.removeGraphs();
+        this.init();
+        this.build();
+    }
+
+    public disable(): void {
+        this.clearGraphs();
+        this.draw(true);
     }
 
     public update(): void {
@@ -47,10 +58,6 @@ export class Graph extends Container {
         this.draw();
     }
 
-    public rebuild(): void {
-        //
-    }
-
     private build(): void {
         const { width, height } = this.getBounds();
 
@@ -63,9 +70,9 @@ export class Graph extends Container {
         this.draw();
     }
 
-    private draw(): void {
-        this.drawOrangeBkg();
-        this.drawWhiteLine();
+    private draw(drawBW = false): void {
+        this.drawOrangeBkg(drawBW);
+        this.drawWhiteLine(drawBW);
         this.drawPoints();
     }
 
@@ -85,16 +92,16 @@ export class Graph extends Container {
         this.pointsGraphics.beginFill(0xff0000, 1);
         this.getPointsArray().forEach((point) => {
             const { x, y, r } = point;
-            this.pointsGraphics.drawCircle(x, y, r);
+            this.pointsGraphics?.drawCircle(x, y, r);
         });
 
         this.pointsGraphics.endFill();
         this.addChild(this.pointsGraphics);
     }
 
-    private drawOrangeBkg(): void {
+    private drawOrangeBkg(drawBW: boolean): void {
         this.orangeBkg = new Graphics();
-        this.orangeBkg.beginFill(0xff9e02, 1);
+        this.orangeBkg.beginFill(drawBW ? 0x48555e : 0xff9e02, 1);
         this.orangeBkg.moveTo(this.startPoint.x, this.startPoint.y);
         this.orangeBkg.bezierCurveTo(
             this.displacementPoint.x,
@@ -110,11 +117,11 @@ export class Graph extends Container {
         this.addChild(this.orangeBkg);
     }
 
-    private drawWhiteLine(): void {
+    private drawWhiteLine(drawBW: boolean): void {
         this.bezierLine = new Graphics();
         this.bezierLine.lineStyle({
             width: 10,
-            color: 0xffffff,
+            color: drawBW ? 0x3c4a54 : 0xffffff,
             cap: LINE_CAP.ROUND,
         });
         this.bezierLine.moveTo(this.startPoint.x, this.startPoint.y);
@@ -130,9 +137,16 @@ export class Graph extends Container {
     }
 
     private clearGraphs(): void {
-        this.orangeBkg.clear();
-        this.pointsGraphics.clear();
-        this.bezierLine.clear();
+        this.orangeBkg?.clear();
+        this.pointsGraphics?.clear();
+        this.bezierLine?.clear();
+    }
+
+    private removeGraphs(): void {
+        this.clearGraphs();
+        this.orangeBkg = null;
+        this.pointsGraphics = null;
+        this.bezierLine = null;
     }
 
     private getPointsArray(): BezierPoint[] {

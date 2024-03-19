@@ -3,7 +3,7 @@ import { ForegroundViewEvents, MainGameEvents, MultiplierEvents } from '../event
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
-import { gameStateStartingGuard } from './Guards';
+import { gameStateCrashGuard, gameStateStartingGuard } from './Guards';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -34,8 +34,18 @@ const onMultiplierTargetReachedCommand = (): void => {
     Head.gameModel.setToCrashState();
 };
 
+const setTimerForStartingCommand = (): void => {
+    Head.gameModel.setTimerForStarting();
+};
+
 const onGameStateUpdateCommand = (newState: GameState): void => {
-    lego.command.guard(gameStateStartingGuard).execute(getNewMultiplierCommand);
+    lego.command
+        //
+        .guard(gameStateStartingGuard)
+        .execute(getNewMultiplierCommand)
+
+        .guard(gameStateCrashGuard)
+        .execute(setTimerForStartingCommand);
 };
 
 const eventCommandPairs = Object.freeze([

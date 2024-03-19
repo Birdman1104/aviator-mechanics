@@ -4,6 +4,7 @@ import { MultiplierEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 
 const ACCELERATION = 0.00005;
+const ANIMATION_SPEED = 0.001;
 
 export class MultiplierView extends Container {
     private multiplierTarget: number;
@@ -14,7 +15,7 @@ export class MultiplierView extends Container {
 
     private hasReachedTargetMultiplier = false;
 
-    private animationSpeed = 0.001;
+    private animationSpeed = ANIMATION_SPEED;
 
     constructor() {
         super();
@@ -25,6 +26,15 @@ export class MultiplierView extends Container {
 
     public update(): void {
         this.updateMultiplier();
+    }
+
+    public reset(): void {
+        this.multiplierValue = '1';
+        this.trueValue = 1;
+        this.hasReachedTargetMultiplier = false;
+        this.animationSpeed = ANIMATION_SPEED;
+        this.multiplierText.text = `1.00x`;
+        this.multiplierText.style.fill = 0xffffff;
     }
 
     private build(): void {

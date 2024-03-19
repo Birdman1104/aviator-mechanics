@@ -1,3 +1,4 @@
+import { delayRunnable } from '../Utils';
 import { MULTIPLIERS_CHECKPOINTS, RND_CHECKPOINTS } from '../configs/Constants';
 import { ObservableModel } from './ObservableModel';
 
@@ -51,6 +52,14 @@ export class GameModel extends ObservableModel {
 
     public setToCrashState(): void {
         this._state = GameState.Crash;
+    }
+
+    public setToStartingState(): void {
+        this._state = GameState.Starting;
+    }
+
+    public setTimerForStarting(): void {
+        delayRunnable(3, this.setToStartingState, this);
     }
 
     private initIntervalsData(): void {

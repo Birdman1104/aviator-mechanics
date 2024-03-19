@@ -31,6 +31,7 @@ export class ForegroundView extends PixiGrid {
     private onGameStateUpdate(newState: GameState): void {
         switch (newState) {
             case GameState.Starting:
+                this.hideCrashed();
                 this.showStartingLoader();
                 this.startingLoader.startAnimation();
                 break;

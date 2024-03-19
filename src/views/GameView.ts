@@ -45,8 +45,12 @@ export class GameView extends PixiGrid {
         this.state = newState;
 
         switch (newState) {
-            case GameState.Action:
-                // this.startMultiplierTween();
+            case GameState.Crash:
+                this.graph.disable();
+                break;
+            case GameState.Starting:
+                this.graph.reset();
+                this.multiplier.reset();
                 break;
 
             default:
