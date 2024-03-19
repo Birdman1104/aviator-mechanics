@@ -12,7 +12,7 @@ const getForegroundGridLandscapeConfig = () => {
         bounds,
         cells: [
             {
-                name: 'button',
+                name: 'loader',
                 bounds: { x: 0, y: 0.6, width: 1, height: 0.1 },
             },
         ],
@@ -21,7 +21,7 @@ const getForegroundGridLandscapeConfig = () => {
 
 const getForegroundGridPortraitConfig = () => {
     const bounds = { x: 0, y: 0, width: document.body.clientWidth, height: document.body.clientHeight };
-    const buttonHeight = isNarrowScreen() ? 0.085 : 0.1;
+    const loaderHeight = isNarrowScreen() ? 0.085 : 0.1;
 
     return {
         name: 'foreground',
@@ -29,8 +29,8 @@ const getForegroundGridPortraitConfig = () => {
         bounds,
         cells: [
             {
-                name: 'button',
-                bounds: { x: 0, y: 0.6, width: 1, height: buttonHeight },
+                name: 'loader',
+                bounds: { x: 0, y: 0.6, width: 1, height: loaderHeight },
             },
         ],
     };

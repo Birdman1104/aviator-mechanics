@@ -1,38 +1,27 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
-import { Text } from 'pixi.js';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import { Graph } from './Graph';
+import { MultiplierView } from './MultiplierView';
 
-const ACCELERATION = 0.0000005;
 export class GameView extends PixiGrid {
     private graph: Graph;
     private state: GameState;
-
-    private multiplierTarget: number;
-    private multiplierValue = '1';
-    private trueValue = 1;
-
-    private multiplierText: Text;
-
-    private hasReachedTargetMultiplier = false;
-
-    private animationSpeed = 0.001;
+    private multiplier: MultiplierView;
 
     constructor() {
         super();
 
         lego.event.on(GameModelEvents.StateUpdate, this.onStateUpdate, this);
-        lego.event.on(GameModelEvents.MultiplierUpdate, this.onMultiplierUpdate, this);
         this.build();
     }
 
     public update(): void {
         if (this.state === GameState.Action) {
             this.graph?.update();
-            this.updateMultiplier();
+            this.multiplier?.update();
         }
     }
 
@@ -48,21 +37,11 @@ export class GameView extends PixiGrid {
         this.graph = new Graph();
         this.setChild('graph', this.graph);
 
-        this.buildMultiplier();
-    }
-
-    private buildMultiplier(): void {
-        this.multiplierText = new Text(`1.00x`, {
-            fontSize: 55,
-            align: 'center',
-        });
-
-        this.setChild('multiplier', this.multiplierText);
+        this.multiplier = new MultiplierView();
+        this.setChild('multiplier', this.multiplier);
     }
 
     private onStateUpdate(newState: GameState): void {
-        console.warn(GameState[newState]);
-
         this.state = newState;
 
         switch (newState) {
@@ -73,24 +52,5 @@ export class GameView extends PixiGrid {
             default:
                 break;
         }
-    }
-
-    private onMultiplierUpdate(multiplier: number): void {
-        this.multiplierTarget = multiplier;
-    }
-
-    private updateMultiplier(): void {
-        if (this.hasReachedTargetMultiplier) {
-            return;
-        }
-
-        this.trueValue += this.animationSpeed;
-        this.animationSpeed += ACCELERATION;
-        this.multiplierValue = this.trueValue.toFixed(2);
-        if (+this.multiplierValue === this.multiplierTarget) {
-            this.hasReachedTargetMultiplier = true;
-        }
-
-        this.multiplierText.text = `${this.multiplierValue}x`;
     }
 }
