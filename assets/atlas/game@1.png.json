@@ -1,23 +1,23 @@
 {
   "frames": {
-    "green_button_up.png": {
+    "y-axis.png": {
       "frame": {
         "x": 3,
         "y": 3,
-        "w": 100,
-        "h": 128
+        "w": 52,
+        "h": 518
       },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 100,
-        "h": 128
+        "w": 52,
+        "h": 518
       },
       "sourceSize": {
-        "w": 100,
-        "h": 128
+        "w": 52,
+        "h": 518
       },
       "pivot": {
         "x": 0.5,
@@ -31,8 +31,8 @@
     "image": "game.png",
     "format": "RGBA8888",
     "size": {
-      "w": 106,
-      "h": 134
+      "w": 58,
+      "h": 524
     },
     "scale": 1
   }
