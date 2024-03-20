@@ -42,7 +42,6 @@
         "@armathai/lego": "^5.0.9",
         "@armathai/pixi-grid": "^6.0.1",
         "@pixi/core": "^7.2.4",
-        "animejs": "^3.2.2",
         "howler": "^2.2.3",
         "pixi.js": "^7.2.4"
     }
