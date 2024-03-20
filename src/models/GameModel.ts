@@ -110,7 +110,9 @@ export class GameModel extends ObservableModel {
     private updateMultiplier(): void {
         if (this._hasReachedTargetMultiplier) return;
         this.trueValue += this.animationSpeed;
-        this.animationSpeed += ACCELERATION;
+        if (this.trueValue > 2) {
+            this.animationSpeed += ACCELERATION;
+        }
         this._multiplierValue = this.trueValue.toFixed(2);
 
         if (+this._multiplierValue >= this._targetMultiplier) {

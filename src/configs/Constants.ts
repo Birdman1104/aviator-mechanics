@@ -3,9 +3,12 @@ export const RND_CHECKPOINTS = [-0, 0.36, 0.55, 0.73, 0.81, 0.88, 0.93, 0.97, 0.
 
 export const START_DURATION = 1200; // milliseconds
 
-export const GRAPH_SPEED = 0.001; // milliseconds
+export const GRAPH_SPEED = 0.0025;
 
-export const ACCELERATION = 0.000005;
-export const MULTIPLIER_SPEED = 0.0001;
+export const ACCELERATION = 0.0000025;
+export const MULTIPLIER_SPEED = 0.002;
+
+export const MAX_FPS = 30;
+export const ONE_TO_TWO_DURATION = 1000 / (MAX_FPS * MULTIPLIER_SPEED);
 
 export const INITIAL_MAX_VALUE = 2.0; // for the graph on Y axis

@@ -3,11 +3,11 @@ import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
-import { Graph } from './Graph';
+import { Board } from './Board';
 import { MultiplierView } from './MultiplierView';
 
 export class GameView extends PixiGrid {
-    private graph: Graph;
+    private board: Board;
     private state: GameState;
     private multiplier: MultiplierView;
 
@@ -20,7 +20,7 @@ export class GameView extends PixiGrid {
 
     public update(): void {
         if (this.state === GameState.Action) {
-            this.graph?.update();
+            this.board?.update();
         }
     }
 
@@ -33,8 +33,8 @@ export class GameView extends PixiGrid {
     }
 
     private build(): void {
-        this.graph = new Graph();
-        this.setChild('graph', this.graph);
+        this.board = new Board();
+        this.setChild('graph', this.board);
 
         this.multiplier = new MultiplierView();
         this.setChild('multiplier', this.multiplier);
@@ -45,10 +45,10 @@ export class GameView extends PixiGrid {
 
         switch (newState) {
             case GameState.Crash:
-                this.graph.disable();
+                this.board.disable();
                 break;
             case GameState.Starting:
-                this.graph.reset();
+                this.board.reset();
                 this.multiplier.reset();
                 break;
 

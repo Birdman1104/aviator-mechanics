@@ -16,8 +16,6 @@ type AssetNameAndPath = {
 type BezierPoint = {
     x: number;
     y: number;
-    // TODO - remove radius
-    r: number;
 };
 
 type IntervalsData = {

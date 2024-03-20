@@ -1,4 +1,4 @@
-import { lego, legoLogger } from '@armathai/lego';
+import { lego } from '@armathai/lego';
 import { PixiStatsPlugin } from '@armathai/pixi-stats';
 import { Application, Assets } from 'pixi.js';
 import PixiStage from './MainStage';
@@ -7,6 +7,7 @@ import { fitDimension } from './Utils';
 import { assets } from './assets/assetsNames/assets';
 import { atlases } from './assets/assetsNames/atlas';
 import { fonts } from './assets/assetsNames/fonts';
+import { MAX_FPS } from './configs/Constants';
 import { mapCommands } from './configs/EventCommandPairs';
 import { ScreenSizeConfig } from './configs/ScreenSizeConfig';
 import { MainGameEvents, WindowEvent } from './events/MainEvents';
@@ -26,6 +27,7 @@ class App extends Application {
     }
 
     public async init(): Promise<void> {
+        this.ticker.maxFPS = MAX_FPS;
         this.stage = new PixiStage();
         // @ts-ignore
         this.view.classList.add('app');
@@ -99,7 +101,7 @@ class App extends Application {
     }
 
     private initLego(): void {
-        legoLogger.start(lego, Object.freeze({}));
+        // legoLogger.start(lego, Object.freeze({}));
         // TODO GAMEINITCOMMAND
         // lego.command.execute(onGameInitCommand);
         // lego.event.emit(MainGameEvents.Init);

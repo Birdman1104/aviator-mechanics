@@ -1,9 +1,8 @@
 import { Container, Graphics, LINE_CAP, Rectangle } from 'pixi.js';
-import { GRAPH_SPEED } from '../configs/Constants';
-import { YAxis } from './YAxis';
+import { GRAPH_SPEED, MAX_FPS, ONE_TO_TWO_DURATION } from '../configs/Constants';
 
-const WIDTH = 800;
-const HEIGHT = 600;
+const WIDTH = 695;
+const HEIGHT = 520;
 
 export class Graph extends Container {
     private startPoint: BezierPoint;
@@ -14,8 +13,6 @@ export class Graph extends Container {
     private displacementPointTarget2: BezierPoint;
     private orangeBkg: Graphics | null;
     private bezierLine: Graphics | null;
-
-    private yAxis: YAxis;
 
     private progress = 0;
     // TODO remove points graphics
@@ -36,7 +33,6 @@ export class Graph extends Container {
         this.removeGraphs();
         this.init();
         this.draw();
-        this.yAxis.reset();
     }
 
     public disable(): void {
@@ -45,19 +41,31 @@ export class Graph extends Container {
     }
 
     public update(): void {
-        this.endPoint.x += (this.endPointTarget.x - this.endPoint.x) * GRAPH_SPEED;
-        this.endPoint.y += (this.endPointTarget.y - this.endPoint.y) * GRAPH_SPEED;
+        const dx = (this.endPointTarget.x - this.startPoint.x) / (ONE_TO_TWO_DURATION / MAX_FPS);
+        const dy = Math.abs(this.endPointTarget.y - this.startPoint.y) / (ONE_TO_TWO_DURATION / MAX_FPS);
+
+        if (this.endPoint.x < this.endPointTarget.x) {
+            this.endPoint.x += dx;
+        } else {
+            this.endPoint.x = this.endPointTarget.x;
+        }
+
+        if (this.endPoint.y > this.endPointTarget.y) {
+            this.endPoint.y -= dy;
+        } else {
+            this.endPoint.y = this.endPointTarget.y;
+        }
 
         this.progress = this.endPoint.x / this.endPointTarget.x;
 
-        if (this.progress <= 0.6) {
+        if (this.progress <= 0.6 && this.progress > 0.1) {
             this.displacementPoint.x += (this.displacementPointTarget1.x - this.displacementPoint.x) * GRAPH_SPEED;
             this.displacementPoint.y += (this.displacementPointTarget1.y - this.displacementPoint.y) * GRAPH_SPEED;
-        } else {
+        } else if (this.progress > 0.6) {
             this.displacementPoint.x +=
-                (this.displacementPointTarget2.x - this.displacementPoint.x) * (GRAPH_SPEED / 4);
+                (this.displacementPointTarget2.x - this.displacementPoint.x) * (GRAPH_SPEED / 3);
             this.displacementPoint.y +=
-                (this.displacementPointTarget2.y - this.displacementPoint.y) * (GRAPH_SPEED / 4);
+                (this.displacementPointTarget2.y - this.displacementPoint.y) * (GRAPH_SPEED / 3);
         }
 
         this.clearGraphs();
@@ -65,22 +73,7 @@ export class Graph extends Container {
     }
 
     private build(): void {
-        const { width, height } = this.getBounds();
-
-        const gr = new Graphics();
-        gr.beginFill(0x3344cc, 0.5);
-        gr.drawRect(0, 0, width, height);
-        gr.endFill();
-        this.addChild(gr);
-
         this.draw();
-        this.buildYAxes();
-    }
-
-    private buildYAxes(): void {
-        this.yAxis = new YAxis();
-        this.yAxis.position.set(10, 0);
-        this.addChild(this.yAxis);
     }
 
     private draw(drawBW = false): void {
@@ -90,24 +83,19 @@ export class Graph extends Container {
     }
 
     private init(): void {
-        this.startPoint = { x: 0, y: HEIGHT, r: 15 };
-        this.endPoint = { x: 0, y: HEIGHT, r: 15 };
-        this.displacementPoint = { x: 0, y: HEIGHT, r: 15 };
+        this.startPoint = { x: 0, y: HEIGHT };
+        this.endPoint = { x: 0, y: HEIGHT };
+        this.displacementPoint = { x: 0, y: HEIGHT };
 
-        this.endPointTarget = { x: WIDTH, y: 0, r: 35 };
-        this.displacementPointTarget1 = { x: WIDTH / 2, y: HEIGHT / 2, r: 5 };
-        this.displacementPointTarget2 = { x: WIDTH * 0.8, y: HEIGHT * 0.8, r: 5 };
+        this.endPointTarget = { x: WIDTH, y: 0 };
+        this.displacementPointTarget1 = { x: WIDTH / 2, y: HEIGHT / 2 + 100 };
+        this.displacementPointTarget2 = { x: WIDTH * 0.9, y: HEIGHT * 0.9 };
     }
 
     private drawPoints(): void {
         this.pointsGraphics = new Graphics();
-
-        this.pointsGraphics.beginFill(0xff0000, 1);
-        this.getPointsArray().forEach((point) => {
-            const { x, y, r } = point;
-            this.pointsGraphics?.drawCircle(x, y, r);
-        });
-
+        this.pointsGraphics.beginFill(0xffffff, 1);
+        this.pointsGraphics.drawCircle(this.endPoint.x, this.endPoint.y, 15);
         this.pointsGraphics.endFill();
         this.addChild(this.pointsGraphics);
     }
@@ -160,9 +148,5 @@ export class Graph extends Container {
         this.orangeBkg = null;
         this.pointsGraphics = null;
         this.bezierLine = null;
-    }
-
-    private getPointsArray(): BezierPoint[] {
-        return [this.displacementPoint, this.endPoint];
     }
 }

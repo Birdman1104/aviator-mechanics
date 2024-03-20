@@ -4,6 +4,7 @@ import App from './App';
 window.addEventListener('load', () => {
     window.game = new App();
     window.game.init();
+    globalThis.__PIXI_APP__ = window.game;
 
     window.addEventListener('resize', () => window.game.appResize());
     window.addEventListener('orientationchange', () => window.game.appResize());
