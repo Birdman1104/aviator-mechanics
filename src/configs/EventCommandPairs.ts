@@ -26,9 +26,11 @@ const prepareForActionCommand = (): void => {
     Head.gameModel.prepareForAction();
 };
 
-const onStartTimerCompleteCommand = (): void => {
-    Head.gameModel.setToActionState();
-    Head.gameModel.startMultiplierUpdate();
+const onStartTimerCompleteCommand = (completed: boolean): void => {
+    if (completed) {
+        Head.gameModel.setToActionState();
+        Head.gameModel.startMultiplierUpdate();
+    }
 };
 
 const onHasReachedTargetMultiplierUpdateCommand = (value: boolean): void => {

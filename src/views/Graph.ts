@@ -30,6 +30,7 @@ export class Graph extends Container {
     }
 
     public reset() {
+        this.progress = 0;
         this.removeGraphs();
         this.init();
         this.draw();
