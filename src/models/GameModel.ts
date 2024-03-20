@@ -30,6 +30,8 @@ export class GameModel extends ObservableModel {
 
     private _timerComplete = false;
 
+    private _timePassed = 0;
+
     constructor() {
         super('GameModel');
 
@@ -41,6 +43,7 @@ export class GameModel extends ObservableModel {
             '_multiplierValue',
             '_startingIn',
             '_timerComplete',
+            '_timePassed',
         );
     }
 
@@ -66,6 +69,14 @@ export class GameModel extends ObservableModel {
 
     set targetMultiplier(value: number) {
         this._targetMultiplier = value;
+    }
+
+    get timePassed(): number {
+        return this._timePassed;
+    }
+
+    set timePassed(value: number) {
+        this._timePassed = value;
     }
 
     get multiplierValue(): string {
@@ -158,6 +169,7 @@ export class GameModel extends ObservableModel {
 
     private updateMultiplier(): void {
         if (this._hasReachedTargetMultiplier) return;
+        this._timePassed += 1 / MAX_FPS;
         this.trueValue += this.animationSpeed;
         this._multiplierValue = this.trueValue.toFixed(2);
 

@@ -21,6 +21,7 @@ export class StartingLoader extends Container {
 
     public updateLoader(value: number): void {
         this.fill.width = WIDTH * (value / START_DURATION);
+        this.text.text = `Starting in ${Math.trunc(value / 1000) + 1}`;
     }
 
     private build(): void {
@@ -31,7 +32,7 @@ export class StartingLoader extends Container {
 
     private buildBkg(): void {
         this.bkg = new Graphics();
-        this.bkg.beginFill(0x2a3c49, 1);
+        this.bkg.beginFill(0x4e5a63, 1);
         this.bkg.drawRoundedRect(0, 0, WIDTH, HEIGHT, 20);
         this.bkg.endFill();
         this.addChild(this.bkg);

@@ -1,8 +1,6 @@
-import { lego } from '@armathai/lego';
 import { Container, Rectangle, Sprite, Text } from 'pixi.js';
 import { getEqualProportionsBetween } from '../Utils';
-import { INITIAL_MAX_VALUE } from '../configs/Constants';
-import { GameModelEvents } from '../events/ModelEvents';
+import { INITIAL_MAX_Y_VALUE } from '../configs/Constants';
 
 const HEIGHT = 519;
 const WIDTH = 52;
@@ -18,12 +16,11 @@ export class YAxis extends Container {
     private text4: Text;
     private text5: Text;
     private text6: Text;
-    private currentMax = INITIAL_MAX_VALUE;
+    private currentMax = INITIAL_MAX_Y_VALUE;
 
     constructor() {
         super();
 
-        lego.event.on(GameModelEvents.MultiplierValueUpdate, this.onMultiplierValueUpdate, this);
         this.build();
     }
 
@@ -31,8 +28,22 @@ export class YAxis extends Container {
         return new Rectangle(0, 0, WIDTH, HEIGHT);
     }
 
+    public updateValues(value: string): void {
+        const m = +value;
+        if (m >= 100) {
+            const r = Math.trunc(m).toString().length - 2;
+            const scaleX = r / 10 + 1.1;
+            this.sprite.scale.set(scaleX, 1);
+            this.updateTextPositions();
+        }
+        if (m - this.currentMax > 0.1) {
+            this.currentMax = m;
+            this.updateTextValues();
+        }
+    }
+
     public reset(): void {
-        this.currentMax = INITIAL_MAX_VALUE;
+        this.currentMax = INITIAL_MAX_Y_VALUE;
         this.updateTextValues();
         this.sprite.scale.set(1);
         this.updateTextPositions();
@@ -51,7 +62,7 @@ export class YAxis extends Container {
     }
 
     private buildTexts(): void {
-        const values = getEqualProportionsBetween(1, INITIAL_MAX_VALUE, PARTITIONS);
+        const values = getEqualProportionsBetween(1, INITIAL_MAX_Y_VALUE, PARTITIONS);
         const config = values.map((v, i) => {
             return { y: PARTITIONS_Y_POS[i].y, value: `${v.toFixed(1)}` };
         });
@@ -74,20 +85,6 @@ export class YAxis extends Container {
         text.position.set(this.sprite.width / 2, y);
         this.addChild(text);
         return text;
-    }
-
-    private onMultiplierValueUpdate(value: string): void {
-        const m = +value;
-        if (m >= 100) {
-            const r = Math.trunc(m).toString().length - 2;
-            const scaleX = r / 10 + 1.1;
-            this.sprite.scale.set(scaleX, 1);
-            this.updateTextPositions();
-        }
-        if (m - this.currentMax > 0.1) {
-            this.currentMax = m;
-            this.updateTextValues();
-        }
     }
 
     private updateTextPositions(): void {

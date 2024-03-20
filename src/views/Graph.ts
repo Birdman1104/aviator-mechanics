@@ -1,8 +1,8 @@
 import { Container, Graphics, LINE_CAP, Rectangle } from 'pixi.js';
 import { GRAPH_SPEED, MAX_FPS, ONE_TO_TWO_DURATION } from '../configs/Constants';
 
-const WIDTH = 695;
-const HEIGHT = 520;
+const WIDTH = 660;
+const HEIGHT = 500;
 
 export class Graph extends Container {
     private startPoint: BezierPoint;

@@ -1,5 +1,8 @@
-import { Container, Graphics, Rectangle } from 'pixi.js';
+import { lego } from '@armathai/lego';
+import { Container, Rectangle } from 'pixi.js';
+import { GameModelEvents } from '../events/ModelEvents';
 import { Graph } from './Graph';
+import { XAxis } from './XAxis';
 import { YAxis } from './YAxis';
 
 const WIDTH = 800;
@@ -8,9 +11,12 @@ const HEIGHT = 600;
 export class Board extends Container {
     private graph: Graph;
     private yAxis: YAxis;
+    private xAxis: XAxis;
 
     constructor() {
         super();
+        lego.event.on(GameModelEvents.MultiplierValueUpdate, this.onMultiplierValueUpdate, this);
+        lego.event.on(GameModelEvents.TimePassedUpdate, this.onTimeUpdate, this);
 
         this.build();
     }
@@ -33,15 +39,8 @@ export class Board extends Container {
     }
 
     private build(): void {
-        const { width, height } = this.getBounds();
-
-        const gr = new Graphics();
-        gr.beginFill(0x3344cc, 0.5);
-        gr.drawRect(0, 0, width, height);
-        gr.endFill();
-        this.addChild(gr);
-
         this.buildYAxes();
+        this.buildXAxes();
         this.buildGraph();
     }
 
@@ -51,9 +50,23 @@ export class Board extends Container {
         this.addChild(this.yAxis);
     }
 
+    private buildXAxes(): void {
+        this.xAxis = new XAxis();
+        this.xAxis.position.set(80, 580);
+        this.addChild(this.xAxis);
+    }
+
     private buildGraph(): void {
         this.graph = new Graph();
-        this.graph.position.set(80, 40);
+        this.graph.position.set(80, 50);
         this.addChild(this.graph);
+    }
+
+    private onMultiplierValueUpdate(value: string): void {
+        this.yAxis.updateValues(value);
+    }
+
+    private onTimeUpdate(time: number): void {
+        this.xAxis.updateValues(time);
     }
 }
