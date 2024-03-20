@@ -7,3 +7,5 @@ export const GRAPH_SPEED = 0.001; // milliseconds
 
 export const ACCELERATION = 0.000005;
 export const MULTIPLIER_SPEED = 0.0001;
+
+export const INITIAL_MAX_VALUE = 2.0; // for the graph on Y axis

@@ -70,3 +70,15 @@ export const isNarrowScreen = (): boolean => {
     const { width, height } = getGameBounds();
     return Math.min(width, height) / Math.max(width, height) < 0.5;
 };
+
+export const getEqualProportionsBetween = (min: number, max: number, proportionsCount: number): number[] => {
+    const arr: number[] = [];
+    const diff = max - min;
+    const ratio = diff / (proportionsCount - 1);
+
+    for (let i = 0; i < proportionsCount; i++) {
+        arr.push(min + i * ratio);
+    }
+
+    return arr;
+};

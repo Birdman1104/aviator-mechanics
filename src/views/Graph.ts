@@ -35,7 +35,8 @@ export class Graph extends Container {
     public reset() {
         this.removeGraphs();
         this.init();
-        this.build();
+        this.draw();
+        this.yAxis.reset();
     }
 
     public disable(): void {
@@ -78,7 +79,7 @@ export class Graph extends Container {
 
     private buildYAxes(): void {
         this.yAxis = new YAxis();
-        this.yAxis.position.set(0, 0);
+        this.yAxis.position.set(10, 0);
         this.addChild(this.yAxis);
     }
 
