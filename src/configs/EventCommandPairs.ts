@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { ForegroundViewEvents, MainGameEvents, MultiplierEvents } from '../events/MainEvents';
+import { ForegroundViewEvents, MainGameEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
@@ -22,16 +22,17 @@ const onMainViewReadyCommand = (): void => {
     Head.initGameModel();
 };
 
-const getNewMultiplierCommand = (): void => {
-    Head.gameModel.setNewMultiplier();
+const prepareActionCommand = (): void => {
+    Head.gameModel.prepareForAction();
 };
 
 const onStartTimerCompleteCommand = (): void => {
     Head.gameModel.setToActionState();
+    Head.gameModel.startMultiplierUpdate();
 };
 
-const onMultiplierTargetReachedCommand = (): void => {
-    Head.gameModel.setToCrashState();
+const onHasReachedTargetMultiplierUpdateCommand = (value: boolean): void => {
+    if (value) Head.gameModel.setToCrashState();
 };
 
 const setTimerForStartingCommand = (): void => {
@@ -42,7 +43,7 @@ const onGameStateUpdateCommand = (newState: GameState): void => {
     lego.command
         //
         .guard(gameStateStartingGuard)
-        .execute(getNewMultiplierCommand)
+        .execute(prepareActionCommand)
 
         .guard(gameStateCrashGuard)
         .execute(setTimerForStartingCommand);
@@ -62,7 +63,7 @@ const eventCommandPairs = Object.freeze([
         command: onStartTimerCompleteCommand,
     },
     {
-        event: MultiplierEvents.TargetReached,
-        command: onMultiplierTargetReachedCommand,
+        event: GameModelEvents.HasReachedTargetMultiplierUpdate,
+        command: onHasReachedTargetMultiplierUpdateCommand,
     },
 ]);

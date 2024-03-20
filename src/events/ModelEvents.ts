@@ -1,3 +1,8 @@
-export const GameModelEvents = { StateUpdate: 'GameModelStateUpdate', MultiplierUpdate: 'GameModelMultiplierUpdate' };
+export const GameModelEvents = {
+    StateUpdate: 'GameModelStateUpdate',
+    TargetMultiplierUpdate: 'GameModelTargetMultiplierUpdate',
+    MultiplierValueUpdate: 'GameModelMultiplierValueUpdate',
+    HasReachedTargetMultiplierUpdate: 'GameModelHasReachedTargetMultiplierUpdate',
+};
 
 export const HeadModelEvents = { GameModelUpdate: 'HeadModelGameModelUpdate' };

@@ -1,5 +1,5 @@
-import { delayRunnable } from '../Utils';
-import { MULTIPLIERS_CHECKPOINTS, RND_CHECKPOINTS } from '../configs/Constants';
+import { delayRunnable, loopRunnable, removeRunnable } from '../Utils';
+import { ACCELERATION, MULTIPLIERS_CHECKPOINTS, MULTIPLIER_SPEED, RND_CHECKPOINTS } from '../configs/Constants';
 import { ObservableModel } from './ObservableModel';
 
 export enum GameState {
@@ -11,14 +11,19 @@ export enum GameState {
 
 export class GameModel extends ObservableModel {
     private _state: GameState;
-    private _multiplier: number = -1;
+    private _targetMultiplier: number = -1;
     private intervalsData: IntervalsData[] = [];
+
+    private _hasReachedTargetMultiplier = false;
+    private animationSpeed = MULTIPLIER_SPEED;
+    private _multiplierValue = '1.00';
+    private trueValue = 1;
 
     constructor() {
         super('GameModel');
 
         this._state = GameState.Unknown;
-        this.makeObservable();
+        this.makeObservable('_state', '_targetMultiplier', '_hasReachedTargetMultiplier', '_multiplierValue');
     }
 
     get state(): GameState {
@@ -29,12 +34,28 @@ export class GameModel extends ObservableModel {
         this._state = value;
     }
 
-    get multiplier(): number {
-        return this._multiplier;
+    get targetMultiplier(): number {
+        return this._targetMultiplier;
     }
 
-    set multiplier(value: number) {
-        this._multiplier = value;
+    set targetMultiplier(value: number) {
+        this._targetMultiplier = value;
+    }
+
+    get multiplierValue(): string {
+        return this._multiplierValue;
+    }
+
+    set multiplierValue(value: string) {
+        this._multiplierValue = value;
+    }
+
+    get hasReachedTargetMultiplier(): boolean {
+        return this._hasReachedTargetMultiplier;
+    }
+
+    set hasReachedTargetMultiplier(value: boolean) {
+        this._hasReachedTargetMultiplier = value;
     }
 
     public init(): void {
@@ -42,8 +63,13 @@ export class GameModel extends ObservableModel {
         this._state = GameState.Starting;
     }
 
-    public setNewMultiplier(): void {
-        this._multiplier = this.getMultiplier();
+    public prepareForAction(): void {
+        this.setNewMultiplier();
+
+        this._hasReachedTargetMultiplier = false;
+        this.animationSpeed = MULTIPLIER_SPEED;
+        this._multiplierValue = '1.00';
+        this.trueValue = 1;
     }
 
     public setToActionState(): void {
@@ -62,6 +88,14 @@ export class GameModel extends ObservableModel {
         delayRunnable(3, this.setToStartingState, this);
     }
 
+    public startMultiplierUpdate(): void {
+        loopRunnable(this.updateMultiplier, this);
+    }
+
+    private setNewMultiplier(): void {
+        this._targetMultiplier = this.getMultiplier();
+    }
+
     private initIntervalsData(): void {
         MULTIPLIERS_CHECKPOINTS.forEach((m, i) => {
             this.intervalsData.push({
@@ -71,6 +105,20 @@ export class GameModel extends ObservableModel {
                 maxR: RND_CHECKPOINTS[i + 1],
             });
         });
+    }
+
+    private updateMultiplier(): void {
+        if (this._hasReachedTargetMultiplier) return;
+        this.trueValue += this.animationSpeed;
+        this.animationSpeed += ACCELERATION;
+        this._multiplierValue = this.trueValue.toFixed(2);
+
+        if (+this._multiplierValue >= this._targetMultiplier) {
+            this._hasReachedTargetMultiplier = true;
+            removeRunnable(this.updateMultiplier, this);
+
+            return;
+        }
     }
 
     private getMultiplier(): number {

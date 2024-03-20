@@ -21,7 +21,6 @@ export class GameView extends PixiGrid {
     public update(): void {
         if (this.state === GameState.Action) {
             this.graph?.update();
-            this.multiplier?.update();
         }
     }
 

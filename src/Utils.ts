@@ -43,6 +43,12 @@ export const delayRunnable = (delay, runnable, context, ...args) => {
     return delayWrapper;
 };
 
+export const loopRunnable = (runnable, context?, ...args) => {
+    return window.game.ticker.add(runnable, context, ...args);
+};
+
+export const removeRunnable = (runnable, context?) => window.game.ticker.remove(runnable, context);
+
 export const callIfExists = (callback: any): void => {
     if (typeof callback === 'function') {
         callback();
