@@ -15,7 +15,6 @@ export class Graph extends Container {
     private bezierLine: Graphics | null;
 
     private progress = 0;
-    // TODO remove points graphics
     private pointsGraphics: Graphics | null;
 
     constructor() {
