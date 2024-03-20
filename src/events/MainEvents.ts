@@ -11,7 +11,3 @@ export const MainGameEvents = {
 export const MultiplierEvents = {
     TargetReached: 'MultiplierEventsTargetReached',
 };
-
-export const ForegroundViewEvents = {
-    StartTimerComplete: 'ForegroundViewEventsStartTimerComplete',
-};

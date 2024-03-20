@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { ForegroundViewEvents, MainGameEvents } from '../events/MainEvents';
+import { MainGameEvents } from '../events/MainEvents';
 import { GameModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
@@ -22,7 +22,7 @@ const onMainViewReadyCommand = (): void => {
     Head.initGameModel();
 };
 
-const prepareActionCommand = (): void => {
+const prepareForActionCommand = (): void => {
     Head.gameModel.prepareForAction();
 };
 
@@ -43,7 +43,7 @@ const onGameStateUpdateCommand = (newState: GameState): void => {
     lego.command
         //
         .guard(gameStateStartingGuard)
-        .execute(prepareActionCommand)
+        .execute(prepareForActionCommand)
 
         .guard(gameStateCrashGuard)
         .execute(setTimerForStartingCommand);
@@ -59,7 +59,7 @@ const eventCommandPairs = Object.freeze([
         command: onGameStateUpdateCommand,
     },
     {
-        event: ForegroundViewEvents.StartTimerComplete,
+        event: GameModelEvents.TimerCompleteUpdate,
         command: onStartTimerCompleteCommand,
     },
     {

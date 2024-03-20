@@ -12,6 +12,7 @@ export class ForegroundView extends PixiGrid {
     constructor() {
         super();
         lego.event.on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this);
+        lego.event.on(GameModelEvents.StartingInUpdate, this.onStartingTimerUpdate, this);
         this.build();
     }
 
@@ -28,12 +29,15 @@ export class ForegroundView extends PixiGrid {
         this.buildCrashed();
     }
 
+    private onStartingTimerUpdate(value: number): void {
+        this.startingLoader.updateLoader(value);
+    }
+
     private onGameStateUpdate(newState: GameState): void {
         switch (newState) {
             case GameState.Starting:
                 this.hideCrashed();
                 this.showStartingLoader();
-                this.startingLoader.startAnimation();
                 break;
             case GameState.Action:
                 this.hideStartingLoader();

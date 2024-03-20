@@ -1,8 +1,5 @@
-import { lego } from '@armathai/lego';
-import anime from 'animejs';
 import { Container, Graphics, Text } from 'pixi.js';
 import { START_DURATION } from '../configs/Constants';
-import { ForegroundViewEvents } from '../events/MainEvents';
 
 const WIDTH = 500;
 const HEIGHT = 100;
@@ -14,6 +11,7 @@ export class StartingLoader extends Container {
 
     constructor() {
         super();
+
         this.build();
     }
 
@@ -21,14 +19,8 @@ export class StartingLoader extends Container {
         this.fill.width = WIDTH;
     }
 
-    public startAnimation(): void {
-        anime({
-            targets: this.fill,
-            width: 0,
-            duration: START_DURATION,
-            easing: 'linear',
-            complete: () => lego.event.emit(ForegroundViewEvents.StartTimerComplete),
-        });
+    public updateLoader(value: number): void {
+        this.fill.width = WIDTH * (value / START_DURATION);
     }
 
     private build(): void {
